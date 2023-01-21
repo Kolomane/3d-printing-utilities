@@ -1,0 +1,44 @@
+{
+    "FDM": {
+        "ender3s1": {
+            "wattage": 300,
+            "buildplate-x": 220,
+            "buildplate-y": 220,
+            "buildplate-z": 270,
+            "nozzletemp": 300,
+            "bedtemp": 100,
+            "maxspeed": 150
+        },
+        "megax": {
+            "wattage": 300,
+            "buildplate-x": 300,
+            "buildplate-y": 300,
+            "buildplate-z": 305,
+            "nozzletemp": 250,
+            "bedtemp": 90,
+            "maxspeed": 60
+        }
+    },
+    "DLP": {
+        "photonsq": {
+            "wattage": 66,
+            "buildplate-x": 128,
+            "buildplate-y": 120,
+            "buildplate-z": 200,
+            "xy-resolution": 0.050,
+            "z-resolution": 0.01,
+            "layer-resolution": "0.01-0.15",
+            "maxspeed": 60
+        },
+        "photonx": {
+            "wattage": 120,
+            "buildplate-x": 192,
+            "buildplate-y": 120,
+            "buildplate-z": 245,
+            "xy-resolution": 0.050,
+            "z-resolution": 0.01,
+            "layer-resolution": "0.01-0.15",
+            "maxspeed": 150
+        }
+    }
+}
