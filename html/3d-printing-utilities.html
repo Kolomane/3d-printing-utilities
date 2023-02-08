@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>3D Printing Utilities</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">3D Printing Utilities</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <br />
+    <div class="container-fluid">
+        <div class="row row-cols-2">
+            <!-- row-cols-2 -->
+
+            <div class="col">
+                <div class="card" id="pricing-estimator">
+                    <div class="card-header">
+                        <div class="hstack gap-3">
+                            <h5><b>Cost & Pricing Estimator</b></h5>
+                            <button id="reset-all" class="btn btn-sm btn-outline-danger ms-auto" type="button"
+                                data-bs-toggle="modal" data-bs-target="#reset-all-information">
+                                💣
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <!-- START LIST ITEM -->
+                            <li class="list-group-item">
+                                <h6><b>Printer Information:</b></h6>
+                                <!-- Printer Select -->
+                                <select id="printer-select" class="form-select form-select-sm mb-1"
+                                    aria-label="Printer Selection" data-bs-toggle="tooltip"
+                                    data-bs-title="Select a 3D Printer from the list...">
+                                    <option value="ender3s1" selected>Creality Ender 3 S1</option>
+                                    <option value="megax">AnyCubic Mega X</option>
+                                    <option value="photonsq">AnyCubuc Photon SQ</option>
+                                    <option value="photonx">AnyCubic Photon X</option>
+                                    <option value="customprinter">Custom...</option>
+                                </select>
+
+                                <!-- Wattage -->
+                                <form class="was-validated">
+                                    <div id="printer-wattage" class="input-group input-group-sm mb-1"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-title="IMPORTANT: Enter the Wattage for the printer. This is the only field that actually matters, all else are informational.">
+                                        <span class="input-group-text" id="printer-wattage-label">⚡ Wattage</span>
+                                        <input id="printer-wattage-input" type="text" class="form-control"
+                                            placeholder="300" aria-label="Wattage"
+                                            aria-describedby="printer-wattage-label" required>
+                                    </div>
+                                </form>
+
+                                <!-- ALL ELSE IS INFORMATION, DISABLED FIELDS -->
+                                <!-- Build Plate Size -->
+                                <div id="printer-buildplate" class="input-group input-group-sm mb-1"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-title="INFORMATIONAL ONLY: Build plate size (X, Y) in mm">
+                                    <span class="input-group-text" id="printer-buildplate-label">📏 Build Plate
+                                        Size</span>
+                                    <input id="printer-buildplate-input" type="text" class="form-control"
+                                        placeholder="220mm X 220mm" aria-label="220mm X 220mm"
+                                        aria-describedby="printer-buildplate-label" disabled>
+                                </div>
+
+                                <!-- Max Nozzle Temp -->
+                                <div id="printer-nozzletemp" class="input-group input-group-sm mb-1"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-title="INFORMATIONAL ONLY: Max temperature the Nozzle can withstand">
+                                    <span class="input-group-text" id="printer-nozzletemp-label">🔥 Max Nozzle
+                                        Temp</span>
+                                    <input id="printer-nozzletemp-input" type="text" class="form-control"
+                                        placeholder="300" aria-label="300" aria-describedby="printer-nozzletemp-label"
+                                        disabled>
+                                </div>
+
+                                <!-- Max Bed Temp -->
+                                <div id="printer-bedtemp" class="input-group input-group-sm mb-1"
+                                    data-bs-toggle="tooltip" data-bs-title="INFORMATIONAL ONLY: Max bed temperature">
+                                    <span class="input-group-text" id="printer-bedtemp-label">♨ Max Bed Temp</span>
+                                    <input id="printer-bedtemp-input" type="text" class="form-control" placeholder="100"
+                                        aria-label="100" aria-describedby="printer-bedtemp-label" disabled>
+                                </div>
+
+                                <!-- Max Speed -->
+                                <div id="printer-maxspeed" class="input-group input-group-sm mb-1"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-title="INFORMATIONAL ONLY: Subjective max speed for the printer">
+                                    <span class="input-group-text" id="printer-maxspeed-label">⏩ Max Speed</span>
+                                    <input id="printer-maxspeed-input" type="text" class="form-control"
+                                        placeholder="150mm/s" aria-label="150mm/s"
+                                        aria-describedby="printer-maxspeed-label" disabled>
+                                </div>
+                            </li>
+                            <!-- END LIST ITEM -->
+                            <!-- START LIST ITEM -->
+                            <li class="list-group-item" id="material-information">
+                                <h6><b>Material Type:</b></h6>
+                                <!-- Printer Select -->
+                                <select id="material-select" class="form-select form-select-sm mb-1"
+                                    aria-label="Material Selection" data-bs-toggle="tooltip"
+                                    data-bs-title="Select a Material from the list...">
+                                    <option value="coexpla" selected>CoEx PLA</option>
+                                    <option value="coexpetg">CoEx PETG</option>
+                                    <option value="coexabs">CoEx ABS</option>
+                                    <option value="coexgfnylex">CoEx Glass-Filled Nylex</option>
+                                    <option value="sunluresin">SUNLU Resin</option>
+                                    <option value="custommaterial">Custom...</option>
+                                </select>
+
+                                <!-- Material Cost per kg -->
+                                <form class="was-validated">
+                                    <div id="material-cost" class="input-group input-group-sm mb-1"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-title="IMPORTANT: Enter the RETAIL COST for the material.">
+                                        <span class="input-group-text" id="material-cost-label">💸 Material Cost per
+                                            1kg</span>
+                                        <input id="material-cost-input" type="text" class="form-control"
+                                            aria-describedby="material-cost-label" required>
+                                    </div>
+                                </form>
+
+                                <!-- Tax Rate -->
+                                <div id="material-taxrate" class="input-group input-group-sm mb-1"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-title="IMPORTANT: Enter the TAX RATE when purchasing material; Wisconsin sales tax is assumed.">
+                                    <span class="input-group-text" id="material-taxrate-label">🧾 Tax Rate %</span>
+                                    <input id="material-taxrate-input" type="text" class="form-control" value="0.05"
+                                        aria-describedby="material-taxrate-label">
+                                </div>
+
+                                <!-- Recommended Temp Range -->
+                                <div id="material-temprange" class="input-group input-group-sm mb-1"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-title="INFORMATION ONLY: Manufacturer's recommended temperature range for the material.">
+                                    <span class="input-group-text" id="material-temprange-label">📊 Recommended
+                                        Temperature Range</span>
+                                    <input id="material-temprange-input" type="text" class="form-control"
+                                        value="215-235" aria-describedby="material-temprange-label" disabled>
+                                </div>
+
+                                <!-- Ideal Temp -->
+                                <div id="material-idealtemp" class="input-group input-group-sm mb-1"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-title="INFORMATION ONLY: By trial-and-error, ideal / nominal printing temperature for the material.">
+                                    <span class="input-group-text" id="material-idealtemp-label">⚗ Ideal
+                                        Temperature</span>
+                                    <input id="material-idealtemp-input" type="text" class="form-control" value="218"
+                                        aria-describedby="material-idealtemp-label" disabled>
+                                </div>
+                            </li>
+                            <!-- END LIST ITEM -->
+                            <!-- START LIST ITEM -->
+                            <li class="list-group-item" id="print-properties">
+                                <h6><b>Print Properties:</b></h6>
+
+                                <!-- Object Name -->
+                                <div id="object-name" class="input-group input-group-sm mb-1" data-bs-toggle="tooltip"
+                                    data-bs-title="INFORMATIONAL ONLY: Enter the name of the Object.">
+                                    <span class="input-group-text" id="object-name-label">Object Name</span>
+                                    <input id="object-name-input" type="text" class="form-control"
+                                        placeholder="Boaty McBoatFace" aria-describedby="object-name-label">
+                                </div>
+
+                                <!-- Object Weight -->
+                                <form class="was-validated">
+                                    <div id="object-weight" class="input-group input-group-sm mb-1"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-title="IMPORTANT: Enter the WEIGHT of the Object in GRAMS.">
+                                        <span class="input-group-text" id="object-weight-label">⚖ Object Weight</span>
+                                        <input id="object-weight-input" type="text" class="form-control"
+                                            aria-describedby="object-weight-label" required>
+                                    </div>
+                                </form>
+
+                                <!-- Time to Print (Mins) -->
+                                <form class="was-validated">
+                                    <div id="object-time2print" class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text" id="object-time2print-label">⏳ Time to
+                                            Print</span>
+                                        <span class="input-group-text" id="object-time2print-days-label">DAYS</span>
+                                        <input id="object-time2print-days-input" type="text" class="form-control"
+                                            aria-describedby="object-time2print-days-label" data-bs-toggle="tooltip"
+                                            data-bs-title="IMPORTANT: Enter the TIME TO PRINT for the object in WHOLE NUMBER DAYS. Leave empty if it's LESS than DAYS."
+                                            required>
+                                        <span class="input-group-text" id="object-time2print-hours-label">HOURS</span>
+                                        <input id="object-time2print-hours-input" type="text" class="form-control"
+                                            aria-describedby="object-time2print-hours-label" data-bs-toggle="tooltip"
+                                            data-bs-title="IMPORTANT: Enter the TIME TO PRINT for the object in WHOLE NUMBER HOURS. Leave empty if it's LESS than HOURS."
+                                            required>
+                                        <span class="input-group-text" id="object-time2print-label">MINUTES</span>
+                                        <input id="object-time2print-minutes-input" type="text" class="form-control"
+                                            aria-describedby="object-time2print-label" data-bs-toggle="tooltip"
+                                            data-bs-title="IMPORTANT: Enter the TIME TO PRINT for the object in WHOLE NUMBER MINUTES."
+                                            required>
+                                    </div>
+                                </form>
+
+                                <!-- Objects to Print -->
+                                <div id="object-count" class="input-group input-group-sm mb-1" data-bs-toggle="tooltip"
+                                    data-bs-title="IMPORTANT: Enter the NUMBER of Objects to print.">
+                                    <span class="input-group-text" id="object-count-label">🔢 Objects to Print</span>
+                                    <input id="object-count-input" type="text" class="form-control" value="1"
+                                        aria-describedby="object-count-label">
+                                </div>
+                            </li>
+                            <!-- END LIST ITEM -->
+                            <!-- START LIST ITEM -->
+                            <li class="list-group-item">
+                                <h6><b>Auxiliary Information:</b></h6>
+                                <!-- Aux Filament Dryer -->
+                                <div id="aux-filament-dryer" class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" id="aux-filament-dryer-label">♨ Filament
+                                        Dryer</span>
+                                    <span class="input-group-text" id="aux-filament-dryer-wattage-label">⚡
+                                        Wattage</span>
+                                    <input id="aux-filament-dryer-wattage-input" type="text" class="form-control"
+                                        value="48" aria-label="Wattage"
+                                        aria-describedby="aux-filament-dryer-wattage-label" data-bs-toggle="tooltip"
+                                        data-bs-title="Enter the Wattage for the Filament Dryer.">
+                                    <span class="input-group-text" id="aux-filament-dryer-time-label">⏳ Time in
+                                        Use</span>
+                                    <input id="aux-filament-dryer-time-input" type="text" class="form-control" value="0"
+                                        aria-label="Wattage" aria-describedby="aux-filament-dryer-time-label"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-title="Enter the time spent, in minutes (I know but we're keeping stuff consistent here), that the Filament Dryer will be running.">
+                                </div>
+
+                                <!-- Aux Wash and Cure -->
+                                <div id="aux-wash-and-cure" class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" id="aux-wash-and-cure-label">🚿 Wash &
+                                        Cure</span>
+                                    <span class="input-group-text" id="aux-wash-and-cure-wattage-label">⚡
+                                        Wattage</span>
+                                    <input id="aux-wash-and-cure-wattage-input" type="text" class="form-control"
+                                        value="40" aria-label="Wattage"
+                                        aria-describedby="aux-wash-and-cure-wattage-label" data-bs-toggle="tooltip"
+                                        data-bs-title="Enter the Wattage for the Wash & Cure Station.">
+                                    <span class="input-group-text" id="aux-wash-and-cure-time-label">⏳ Time in
+                                        Use</span>
+                                    <input id="aux-wash-and-cure-time-input" type="text" class="form-control" value="0"
+                                        aria-label="Wattage" aria-describedby="aux-wash-and-cure-time-label"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-title="Enter the time spent, in minutes, that the Wash & Cure Station will be running.">
+                                </div>
+                            </li>
+                            <!-- END LIST ITEM -->
+                            <!-- START LIST ITEM -->
+                            <li class="list-group-item" id="custom-properties">
+                                <h6><b>Custom:</b></h6>
+
+                                <!-- Objects to Print -->
+                                <div id="custom-hours" class="input-group input-group-sm mb-1" data-bs-toggle="tooltip"
+                                    data-bs-title="OPTIONAL: Enter the NUMBER of GENERIC hours. Example: 4.5">
+                                    <span class="input-group-text" id="custom-hours-label">⏱ Custom Hours</span>
+                                    <input id="custom-hours-input" type="text" class="form-control" value="0"
+                                        aria-describedby="custom-hours-label">
+                                    <span class="input-group-text" id="custom-rate-label">💵 Custom Rate per Hour</span>
+                                    <input id="custom-rate-input" type="text" class="form-control" value="100"
+                                        aria-describedby="custom-rate-label">
+                                </div>
+
+                                <!-- Objects to Print -->
+                                <div id="price-per-printing-hour" class="input-group input-group-sm mb-1"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-title="Enter the price per printing hour; example: 0.50 for 50 cents per printing hour">
+                                    <span class="input-group-text" id="price-per-printing-label">💰 Price Per Printing
+                                        Hour</span>
+                                    <input id="price-per-printing-hour-input" type="text" class="form-control"
+                                        value="0.50" aria-describedby="price-per-printing-label">
+                                </div>
+                            </li>
+                            <!-- END LIST ITEM -->
+
+                            <!-- START LIST ITEM -->
+                            <li class="list-group-item">
+                                <h6><b>Fees:</b></h6>
+
+                                <!-- Sales Tax -->
+                                <div id="fees-salestax" class="input-group input-group-sm mb-1" data-bs-toggle="tooltip"
+                                    data-bs-title="IMPORTANT: Enter the TAX RATE for the Invoice / Purchase Order; Wisconsin sales tax is assumed.">
+                                    <span class="input-group-text" id="fees-salestax-label">🧾 Sales Tax %</span>
+                                    <input id="fees-salestax-input" type="text" class="form-control" placeholder="0.05"
+                                        value="0.05" aria-describedby="fees-salestax-label">
+                                </div>
+
+                                <!-- Wave -->
+                                <div id="fees-wave" class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" id="fees-wave-perc-label">🧾 Wave Fee %</span>
+                                    <input id="fees-wave-perc-input" type="text" class="form-control"
+                                        placeholder="0.029" aria-label="0.029" value="0.029"
+                                        aria-describedby="fees-wave-perc-label" data-bs-toggle="tooltip"
+                                        data-bs-title="Wave's standard fee is 2.9%, converted to 0.029% for calculator reasons.">
+                                    <span class="input-group-text" id="fees-wave-flat-rate-label">🧾 Wave Flat-Rate
+                                        Additional
+                                    </span>
+                                    <input id="fees-wave-flat-rate-input" type="text" class="form-control"
+                                        placeholder="0.60" aria-label="0.60" value="0.60"
+                                        aria-describedby="fees-wave-flat-rate-label" data-bs-toggle="tooltip"
+                                        data-bs-title="Wave slaps on an additional flat-rate fee for credit card purchases.">
+                                </div>
+                            </li>
+                            <!-- END LIST ITEM -->
+
+                        </ul>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <div class="hstack gap-3">
+                            <button id="generate-report" class="btn btn-sm btn-outline-primary" type="button">
+                                🦾 Generate Report
+                            </button>
+                            <button id="generate-report" class="btn btn-sm btn-outline-success" type="button"
+                                data-bs-target="#reset-information" aria-controls="reset-information" disabled>
+                                💾 Save Report
+                            </button>
+                            <button id="testing-thangs" class="btn btn-sm btn-outline-warning" type="button"
+                                data-bs-target="#reset-information" aria-controls="reset-information">
+                                ☢ Testing Thangs
+                            </button>
+                            <button id="clear-report" class="btn btn-sm btn-outline-danger ms-auto" type="button">
+                                💣 Clear Report
+                            </button>
+                        </div>
+                        <div class="mb-3">
+                            <label for="pricing-output" class="form-label">Output:</label>
+                            <textarea class="form-control" id="pricing-output" rows="16"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card" id="misc-info">
+                    <div class="card-header">
+                        <div class="hstack gap-3">
+                            <h5><b>Misc. Info</b></h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <!-- START LIST ITEM -->
+                            <li class="list-group-item">
+                                <h6><b>Drying Information:</b></h6>
+                                <table class="table table-dark table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Manufacturer</th>
+                                            <th scope="col">Material Type</th>
+                                            <th scope="col">Temperature Range</th>
+                                            <th scope="col">Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">CoEx</th>
+                                            <td>PLA</td>
+                                            <td>45c</td>
+                                            <td>8hrs</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">CoEx</th>
+                                            <td>PETG</td>
+                                            <td>55c</td>
+                                            <td>8hrs</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">CoEx</th>
+                                            <td>Glass-Filled Nylex</td>
+                                            <td>75c</td>
+                                            <td>6hrs</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">SUNLU</th>
+                                            <td>Resin</td>
+                                            <td colspan="2" class="text-center">55 seconds first-layer | 2-3 seconds
+                                                after</td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+                            </li>
+                            <!-- END LIST ITEM -->
+
+                        </ul>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <div class="mb-3">
+                            <label for="misc-output" class="form-label">Output:</label>
+                            <textarea class="form-control" id="misc-output" rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESET ALL INFORMATION CONFIRMATION -->
+            <div class="modal fade" id="reset-all-information" tabindex="-1"
+                aria-labelledby="reset-all-information-label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="reset-all-information-label">Reset ALL Information?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you for sure that you would like to erase all information within <code
+                                id="card-output"></code> and start new? Note that this erases all <b>INPUT</b> and
+                            <b>OUTPUT</b> data.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button id="reset-all-information-button" type="button" class="btn btn-danger"
+                                data-bs-dismiss="modal">RM /RF THAT
+                                SHIT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bootstrap CDN Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <!-- Custom Scripts -->
+    <script>
+        // Constants
+        const pricingOutput = $("#pricing-output");
+        const materialSelect = $("#material-select");
+        const materialCostPerKg = $("#material-cost-input");
+        const materialTaxRate = $("#material-taxrate-input");
+        const materialRecTemp = $("#material-temprange-input");
+        const materialIdealTemp = $("#material-idealtemp-input");
+        const printerSelect = $("#printer-select");
+        const printerWattage = $("#printer-wattage-input");
+        const printerBuildplate = $("#printer-buildplate-input");
+        const printerNozzletemp = $("#printer-nozzletemp-input");
+        const printerBedtemp = $("#printer-bedtemp-input");
+        const printerMaxspeed = $("#printer-maxspeed-input");
+        const objectName = $("#object-name-input");
+        const objectWeight = $("#object-weight-input");
+        const objectTimeDays = $("#object-time2print-days-input");
+        const objectTimeHours = $("#object-time2print-hours-input");
+        const objectTimeMinutes = $("#object-time2print-minutes-input");
+        const objectCount = $("#object-count-input");
+        const auxFilamentDryerWattage = $("#aux-filament-dryer-wattage-input");
+        const auxFilamentDryerTime = $("#aux-filament-dryer-time-input");
+        const auxWashCureWattage = $("#aux-wash-and-cure-wattage-input");
+        const auxWashCureTime = $("#aux-wash-and-cure-time-input");
+        const customHours = $("#custom-hours-input");
+        const customRate = $("#custom-rate-input");
+        const pricePerPrintingHour = $("#price-per-printing-hour-input")
+        const feesSalesTax = $("#fees-salestax-input");
+        const feesWavePerc = $("#fees-wave-perc-input");
+        const feesWaveFlatRate = $("#fees-wave-flat-rate-input");
+
+        // Get HTML Value
+        function getHtmlValue(idName) {
+            return $(`#idName`).val();
+        };
+
+        // Do all the Maths
+        function generateReport() {
+            // Static variable... National average for electricity
+            const avgElectricalRate = 0.13
+
+            // Actually doing Maths stuff
+            const trueRawMaterialCost = ((+materialCostPerKg.val() * 0.05) + +materialCostPerKg.val()).toFixed(2)
+            const basePrinterElectricalCost = ((+printerWattage.val() / 1000) * +avgElectricalRate).toFixed(2)
+            const truePrinterUsageCost = (((((+objectTimeDays.val() * 24) * 60) + (+objectTimeHours.val() * 60) + +objectTimeMinutes.val()) * +basePrinterElectricalCost) / 100).toFixed(2)
+            const trueObjectMaterialCost = ((+objectWeight.val() / 1000) * +trueRawMaterialCost).toFixed(2)
+            const auxFilamentDryerElectricalCost = ((+auxFilamentDryerWattage.val() / 1000) * +avgElectricalRate).toFixed(2)
+            const trueFilamentDryerCost = ((+auxFilamentDryerTime.val() * +auxFilamentDryerElectricalCost) / 100).toFixed(2)
+            const auxWashAndCureElectricalCost = ((+auxWashCureWattage.val() / 1000) * +avgElectricalRate).toFixed(2)
+            const trueWashAndCureCost = ((+auxWashCureTime.val() * +auxWashAndCureElectricalCost) / 100).toFixed(2)
+
+            const hoursPrinting = ((((+objectTimeDays.val() * 24) * 60) + (+objectTimeHours.val() * 60) + +objectTimeMinutes.val()) / 60)
+            const printingHourCost = (+hoursPrinting * +pricePerPrintingHour.val()).toFixed(2)
+            const customCost = (+customHours.val()) * (+customRate.val())
+
+            const costSum = (((+truePrinterUsageCost) + (+trueObjectMaterialCost) + (+printingHourCost)) * +(objectCount.val())) + (+trueFilamentDryerCost) + (+trueWashAndCureCost) + (+customCost)
+            const costSumWithWave = ((+costSum * +feesWavePerc.val()) + +feesWaveFlatRate.val()).toFixed(2)
+            const salesTaxTotal = (((+costSum + +costSumWithWave) * +feesSalesTax.val())).toFixed(2)
+            const totalCost = ((+salesTaxTotal) + (+costSum + +costSumWithWave)).toFixed(2)
+
+            toTheOutput("pricing", `Print Job: ${objectName.val()}
+=-=-=-=-=-=-=-=
+Material & Printer Cost per Item: $${(+truePrinterUsageCost + +trueObjectMaterialCost).toFixed(2)}
+Printing Hour Charge per Item: $${printingHourCost}
+# of Items: ${objectCount.val()}
+=-=-=-=-=-=-=-=
+Cost: $${(costSum).toFixed(2)}
+Wave Fees: $${costSumWithWave}
+Cost with Wave Fees: $${(+costSum + +costSumWithWave).toFixed(2)}
+Sales Tax: $${salesTaxTotal}
+Total Cost: $${totalCost}
+=-=-=-=-=-=-=-=
+
+`)
+
+        };
+
+        function eraseAllInfoPrimer(cardName) {
+            $("#card-output").text(`${cardName}`);
+            $("#reset-all-information-button").attr("onClick", `eraseAllInformation('${cardName}')`);
+        };
+
+        function eraseAllInformation(cardName) {
+            printerSelect.val("ender3s1")
+            materialSelect.val("coexpla")
+            pricingOutput.val("");
+            objectWeight.val("");
+            objectTimeDays.val("");
+            objectTimeHours.val("");
+            objectTimeMinutes.val("");
+            objectCount.val(1);
+            auxFilamentDryerWattage.val("");
+            auxFilamentDryerTime.val("");
+            auxWashCureWattage.val("");
+            auxWashCureTime.val("");
+            customHours.val("");
+            customRate.val("");
+            pricePerPrintingHour.val("");
+            runInformationPresets();
+        };
+
+        function resetOutput(cardName) {
+            theOutput = cardName + "-output"
+            $(`#${theOutput}`).val("");
+        };
+
+        function toTheOutput(cardName, message) {
+            theOutput = cardName + "-output"
+            $(`#${theOutput}`).val($(`#${theOutput}`).val() + message)
+        };
+
+        function runInformationPresets() {
+            printerInformationPresets();
+            materialInformationPresets();
+        };
+
+        function materialInformationPresets() {
+            const materialSelect = $("#material-select").val();
+            const materialCostPerKg = $("#material-cost-input").val();
+            const materialTaxRate = $("#material-taxrate-input").val();
+            const materialRecTemp = $("#material-temprange-input").val();
+            const materialIdealTemp = $("#material-idealtemp-input").val();
+
+            if (materialSelect == "coexpla") {
+                $("#material-temprange-label").text("📊 Recommended Temperature Range")
+                $("#material-idealtemp-label").text("⚗ Ideal Temperature")
+                $("#material-cost-input").val("27.99")
+                $("#material-taxrate-input").val("0.05")
+                $("#material-temprange-input").val("215-235")
+                $("#material-idealtemp-input").val("218")
+            };
+            if (materialSelect == "coexpetg") {
+                $("#material-temprange-label").text("📊 Recommended Temperature Range")
+                $("#material-idealtemp-label").text("⚗ Ideal Temperature")
+                $("#material-cost-input").val("32.99")
+                $("#material-taxrate-input").val("0.05")
+                $("#material-temprange-input").val("230-250")
+                $("#material-idealtemp-input").val("235")
+            };
+            if (materialSelect == "coexabs") {
+                $("#material-temprange-label").text("📊 Recommended Temperature Range")
+                $("#material-idealtemp-label").text("⚗ Ideal Temperature")
+                $("#material-cost-input").val("27.99")
+                $("#material-taxrate-input").val("0.05")
+                $("#material-temprange-input").val("230-250")
+                $("#material-idealtemp-input").val("???")
+            };
+            if (materialSelect == "coexgfnylex") {
+                $("#material-temprange-label").text("📊 Recommended Temperature Range")
+                $("#material-idealtemp-label").text("⚗ Ideal Temperature")
+                $("#material-cost-input").val("89.99")
+                $("#material-taxrate-input").val("0.05")
+                $("#material-temprange-input").val("245-295")
+                $("#material-idealtemp-input").val("???")
+            };
+            if (materialSelect == "sunluresin") {
+                $("#material-temprange-label").text("⏲ Recommended Exposure Time")
+                $("#material-idealtemp-label").text("⚗ Ideal Exposure Time")
+                $("#material-cost-input").val("18.39")
+                $("#material-taxrate-input").val("0.05")
+                $("#material-temprange-input").val("55s")
+                $("#material-idealtemp-input").val("60s")
+            };
+            if (materialSelect == "custommaterial") {
+                $("#material-temprange-label").text("⏲ Recommended Exposure Time")
+                $("#material-idealtemp-label").text("⚗ Ideal Exposure Time")
+                $("#material-cost-input").val("")
+                $("#material-taxrate-input").val("")
+                $("#material-temprange-input").val("")
+                $("#material-idealtemp-input").val("")
+            };
+        };
+
+        function printerInformationPresets() {
+            const printerSelect = $("#printer-select").val();
+            const printerWattage = $("#printer-wattage-input").val();
+            const printerBuildplate = $("#printer-buildplate-input").val();
+            const printerNozzletemp = $("#printer-nozzletemp-input").val();
+            const printerBedtemp = $("#printer-bedtemp-input").val();
+            const printerMaxspeed = $("#printer-maxspeed-input").val();
+
+            if (printerSelect == "ender3s1") {
+                $("#printer-wattage-input").val(300)
+                $("#printer-buildplate-input").val("220mm x 220mm")
+                $("#printer-nozzletemp-input").val(300)
+                $("#printer-bedtemp-input").val(100)
+                $("#printer-maxspeed-input").val("150mm/s")
+            };
+            if (printerSelect == "megax") {
+                $("#printer-wattage-input").val(300)
+                $("#printer-buildplate-input").val("300mm x 300mm")
+                $("#printer-nozzletemp-input").val(250)
+                $("#printer-bedtemp-input").val(90)
+                $("#printer-maxspeed-input").val("60mm/s")
+            };
+            if (printerSelect == "photonsq") {
+                $("#printer-wattage-input").val(66)
+                $("#printer-buildplate-input").val("128mm x 120mm")
+                $("#printer-nozzletemp-input").val("-")
+                $("#printer-bedtemp-input").val("-")
+                $("#printer-maxspeed-input").val("60mm/h")
+            };
+            if (printerSelect == "photonx") {
+                $("#printer-wattage-input").val(120)
+                $("#printer-buildplate-input").val("270mm x 120mm")
+                $("#printer-nozzletemp-input").val("-")
+                $("#printer-bedtemp-input").val("-")
+                $("#printer-maxspeed-input").val("60mm/h")
+            };
+            if (printerSelect == "customprinter") {
+                $("#printer-wattage-input").val("")
+                $("#printer-buildplate-input").val("mm x mm")
+                $("#printer-nozzletemp-input").val("")
+                $("#printer-bedtemp-input").val("")
+                $("#printer-maxspeed-input").val("mm/s")
+            };
+        };
+
+        // Document functions and whatnot, after all other functions are set
+        $(document).ready(function () {
+            runInformationPresets();
+        });
+
+        // Event Listeners
+        $("#generate-report").click(generateReport);
+        $("#clear-report").click(function () {
+            resetOutput('pricing')
+        });
+        $("#reset-all").click(function () {
+            eraseAllInfoPrimer('pricing-estimator')
+        });
+        $("#printer-select").click(printerInformationPresets);
+        $("#material-select").click(materialInformationPresets);
+        // $("#testing-thangs").on("click", function () {
+        //     $.getJSON("printer-information.json", function (json) {
+        //         console.log("JSON Data: " + json);
+        //     });
+        // });
+    </script>
+</body>
+
+</html>
